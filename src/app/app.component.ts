@@ -1,8 +1,5 @@
-import { Component, inject, signal, Renderer2, DOCUMENT } from '@angular/core';
-import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
-
-import { filter } from 'rxjs/operators';
-import { MetronicInitService } from './core/services/metronic-init.service';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'body[app-root]',
