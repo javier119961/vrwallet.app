@@ -8,3 +8,5 @@ src/app/shared/components/header
 src/app/shared/components/navbar
 src/app/shared/components/partials
 src/app/shared/components/toolbar
+src/assets/vendors
+src/assets/media
