@@ -240,13 +240,19 @@
 .fv-plugins-bootstrap5 .row .fv-plugins-icon-check {
   top: -7px; /* labelHeight/2 - iconHeight/2 */
 }
-.fv-plugins-bootstrap5:not(.fv-plugins-bootstrap5-form-inline) label ~ .fv-plugins-icon {
+.fv-plugins-bootstrap5:not(.fv-plugins-bootstrap5-form-inline)
+  label
+  ~ .fv-plugins-icon {
   top: 32px;
 }
-.fv-plugins-bootstrap5:not(.fv-plugins-bootstrap5-form-inline) label ~ .fv-plugins-icon-check {
+.fv-plugins-bootstrap5:not(.fv-plugins-bootstrap5-form-inline)
+  label
+  ~ .fv-plugins-icon-check {
   top: 25px;
 }
-.fv-plugins-bootstrap5:not(.fv-plugins-bootstrap5-form-inline) label.sr-only ~ .fv-plugins-icon-check {
+.fv-plugins-bootstrap5:not(.fv-plugins-bootstrap5-form-inline)
+  label.sr-only
+  ~ .fv-plugins-icon-check {
   top: -7px;
 }
 .fv-plugins-bootstrap5.fv-plugins-bootstrap5-form-inline .fv-plugins-icon {
@@ -301,16 +307,22 @@
 .fv-plugins-foundation .fv-plugins-icon-container .cell {
   position: relative;
 }
-.fv-plugins-foundation [type=checkbox] ~ .fv-plugins-icon,
-.fv-plugins-foundation [type=checkbox] ~ .fv-plugins-icon {
+.fv-plugins-foundation [type="checkbox"] ~ .fv-plugins-icon,
+.fv-plugins-foundation [type="checkbox"] ~ .fv-plugins-icon {
   top: -7px; /* labelHeight/2 - iconHeight/2 */
 }
 .fv-plugins-foundation.fv-stacked-form .fv-plugins-message-container {
   width: 100%;
 }
 .fv-plugins-foundation.fv-stacked-form label .fv-plugins-icon,
-.fv-plugins-foundation.fv-stacked-form fieldset [type=checkbox] ~ .fv-plugins-icon,
-.fv-plugins-foundation.fv-stacked-form fieldset [type=radio] ~ .fv-plugins-icon {
+.fv-plugins-foundation.fv-stacked-form
+  fieldset
+  [type="checkbox"]
+  ~ .fv-plugins-icon,
+.fv-plugins-foundation.fv-stacked-form
+  fieldset
+  [type="radio"]
+  ~ .fv-plugins-icon {
   top: 25px; /* Same as height of label */
 }
 .fv-plugins-foundation .form-error {

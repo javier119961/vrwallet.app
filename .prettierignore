@@ -1,0 +1,10 @@
+node_modules
+coverage
+.angular
+package-lock.json
+src/app/core/layouts
+src/app/shared/components/footer
+src/app/shared/components/header
+src/app/shared/components/navbar
+src/app/shared/components/partials
+src/app/shared/components/toolbar

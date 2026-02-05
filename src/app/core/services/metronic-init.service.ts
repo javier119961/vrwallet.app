@@ -27,11 +27,10 @@ declare var KTSelect: any;
 declare var KTToast: any;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MetronicInitService {
-
-  constructor() { }
+  constructor() {}
 
   init() {
     this.initToggles();
