@@ -14,6 +14,7 @@ module.exports = defineConfig([
       "**/src/app/core/layouts/**",
       "**/src/app/core/services/metronic-init.service.ts**",
       "**/src/app/shared/components/partials/**",
+      "**/src/assets/**"
     ]
   },
   {
