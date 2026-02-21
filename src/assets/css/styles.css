@@ -5,7 +5,7 @@
 @layer theme {
   :root,
   :host {
-    --font-sans: theme(fontFamily.sans);;
+    --font-sans: theme(fontFamily.sans);
     --font-mono:
       ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
