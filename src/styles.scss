@@ -2,7 +2,8 @@
 
 @import "primeicons/primeicons.css";
 
-/* Definición para SCSS */
+$background-color_1: color-mix(in srgb, var(--p-primary-color) 70%, transparent);
+
 .bg-primary\/70 {
-  background-color: color-mix(in srgb, var(--p-primary-color) 70%, transparent) !important;
+  background-color: $background-color_1;
 }

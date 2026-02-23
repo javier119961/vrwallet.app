@@ -14,20 +14,20 @@ export class AuthService {
   
   private readonly baseUrl = environment.baseUrl;
   
-  public login(username: string, password: string) : Observable<boolean> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, {
-      username, password
+  public login(email: string, password: string) : Observable<boolean> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, {
+      email, password
     }).pipe(
-      map(({accessToken,refreshToken})=>this.handleAuthSuccess(accessToken,refreshToken)),
+      map(({accessToken,refreshToken,expiresIn})=>this.handleAuthSuccess(accessToken,refreshToken,expiresIn)),
       catchError(()=> this.handleAuthError())
     )
   }
   
-  public handleAuthSuccess(token: string, refreshToken: string){
-    this.tokenService.saveTokens(token, refreshToken);
+  public handleAuthSuccess(token: string, refreshToken: string,expiresIn:number){
+    this.tokenService.saveTokens(token, refreshToken,expiresIn);
     return true;
   }
-  
+                                                                               
   public handleAuthError() : Observable<boolean>{
     this.logout();
     return of(false)    

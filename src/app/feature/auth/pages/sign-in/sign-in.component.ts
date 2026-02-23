@@ -1,10 +1,11 @@
-import {Component, inject} from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {Component, inject, signal} from '@angular/core';
+import {Router, RouterLink} from "@angular/router";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FormErrorLabelComponent} from "@shared/components/form-error-label/form-error-label.component";
 import {AuthService} from "../../services/auth.service";
 import {MessageService} from "primeng/api";
 import { ToastModule} from "primeng/toast";
+import {finalize} from "rxjs";
 
 @Component({
   selector: 'app-sign-in',
@@ -12,7 +13,7 @@ import { ToastModule} from "primeng/toast";
     RouterLink,
     ReactiveFormsModule,
     FormErrorLabelComponent,
-    ToastModule
+    ToastModule,
   ],
   providers: [MessageService],
   templateUrl: './sign-in.component.html',
@@ -23,10 +24,13 @@ export class SignInComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
+  private router = inject(Router);
   
-  form = this.fb.group({
+  loading = signal<boolean>(false);
+
+  form = this.fb.nonNullable.group({ // Agregamos .nonNullable
     email: ['', [Validators.required, Validators.email]],
-    password: ['',[
+    password: ['', [
       Validators.required,
       Validators.minLength(6),
       Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
@@ -34,22 +38,37 @@ export class SignInComponent {
   });
   
   handleSubmit(): void {
-    console.log("paso")
-
-    this.messageService.add({
-      key: 'confirm',
-      sticky: true,
-      severity: 'custom',
-      summary: 'Uploading your files.',
-      styleClass: 'backdrop-blur-lg rounded-2xl'
-    });
     
     if (this.form.invalid){
-      
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Atención',
+        detail: 'Verifica los datos ingresados'
+      });
       this.form.markAllAsTouched();
       return;
     }
-    // this.authService.login()
+    
+    this.loading.set(true);
+
+    const {email, password} = this.form.getRawValue()
+    
+    this.authService.login(email,password)
+      .pipe(
+        finalize(()=> this.loading.set(false))
+      )
+      .subscribe((status)=>{
+        if (status){
+          this.router.navigate(['/'])
+            .then();
+        }else{
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Atención',
+            detail: 'Verifica los datos ingresados'
+          })
+        }
+      })
   }
   
 }
