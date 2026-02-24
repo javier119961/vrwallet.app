@@ -8,7 +8,8 @@
     "paths": {
       "@core/*": ["./src/app/core/*"],
       "@env/*": ["./src/environments/*"],
-      "@shared/*": ["./src/app/shared/*"]
+      "@shared/*": ["./src/app/shared/*"],
+      "@auth" : ["./src/app/feature/auth"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
