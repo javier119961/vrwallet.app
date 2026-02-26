@@ -37,5 +37,4 @@ export class AuthService {
     this.tokenService.clearTokens();
     return of(true);
   }
-  
 }

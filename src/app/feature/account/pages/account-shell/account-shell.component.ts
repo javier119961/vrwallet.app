@@ -1,22 +1,20 @@
 import {Component, inject} from '@angular/core';
 import {AccountListComponent} from "../../components/account-list/account-list.component";
-import { rxResource } from '@angular/core/rxjs-interop';
-import {AccountService} from "../../services/account.service";
+import {AccountStore} from "../../services/account-store.service";
+import {CurrencyPipe} from "@angular/common";
 
 @Component({
   selector: 'app-account-shell',
   imports: [
-    AccountListComponent
+    AccountListComponent,
+    CurrencyPipe
+  ],
+  providers:[
+    AccountStore
   ],
   templateUrl: './account-shell.component.html',
   styles: ``,
 })
 export default class AccountShellComponent {
-  private accountService = inject(AccountService);
-    
-  accountRx = rxResource({
-    stream: ()=> this.accountService.getAccounts(),
-    defaultValue: []
-  });
-  
+  accountStore = inject(AccountStore);
 }

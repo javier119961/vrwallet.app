@@ -16,5 +16,4 @@ export class AccountService {
     return this.http.get<ApiResponse<Account[]>>(`${this.baseUrl}/account`)
       .pipe(map(res => res.data));
   }
-  
 }
