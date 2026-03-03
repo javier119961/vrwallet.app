@@ -1,3 +1,3 @@
 export const environment = {
-  baseUrl: 'http://localhost:5204/api'
+  baseUrl: 'https://vrwallet-api.d-teach.space/api'
 };
