@@ -68,15 +68,24 @@ export const AccountStore = signalStore(
                 
                 messageService.add({
                   severity: 'success',
-                  summary: 'Éxito',
-                  detail: 'Cuenta creada correctamente'
+                  detail: 'Cuenta creada correctamente',
                 });   
                 
                 router.navigate(['/accounts']).then();
               },
-              error: () => {
+              error: (error:any) => {
+                const message = error.error.errors 
+                    ? Object.values(error.error.errors).find(x=>Array.isArray(x))?.[0]
+                  : "Hubo un problema al crear la cuenta, intente nuevamente.";
+                
+                
+                messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: message,
+                });
+
                 patchState(store, {isLoading: false});
-                console.log("error")
               }
             })
           );

@@ -1,4 +1,3 @@
-<p-toast position="top-center" size="small"></p-toast>
 <div class="kt-container-fixed">
   <div class="kt-card">
     <div class="kt-card-header">
@@ -21,7 +20,6 @@
             <input 
                 formControlName="name"
                 class="kt-input w-full" 
-                placeholder="tarjeta principal" 
                 type="text">
             <app-form-error-label [control]="form.get('name')" ></app-form-error-label>
           </div>
@@ -103,15 +101,13 @@
           </span>
           <div class="grow w-full">
             <div class="kt-input">
+              <p-colorpicker formControlName="color" class="mb-0"></p-colorpicker>
               <input 
                   class="form-control" 
                   formControlName="color"
-                  data-kt-color-picker="true"
-                  data-kt-color-picker-default="#4CAF50"
-                  data-kt-color-picker-input-mode="true"
-                  id="color-picker-input"
-                  placeholder="Select a color"
+                  [value]="form.get('color')?.value"
                   type="text"
+                  readonly
               />
             </div>
             <app-form-error-label [control]="form.get('color')" ></app-form-error-label>
@@ -124,10 +120,18 @@
             Cancelar
           </button>
           <button
-              [disabled]="form.invalid" 
+              [disabled]="form.invalid || isLoading()" 
               type="submit" 
               class="kt-btn w-1/2">
-            Agregar
+            @if (isLoading()) {
+              <span class="font-bold" role="status" aria-hidden="true">
+                Espere un momento...
+              </span>
+            }@else{
+              <span class="font-bold" role="status" aria-hidden="true">
+                Agregar Cuenta
+              </span>
+            }
           </button>
         </div>
       </form>

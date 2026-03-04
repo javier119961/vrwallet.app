@@ -6,10 +6,10 @@ import {InstitutionService} from "@core/services/institution.service";
 import {toSignal} from "@angular/core/rxjs-interop";
 import {FormErrorLabelComponent} from "@shared/components/form-error-label/form-error-label.component";
 import {MessageService} from "primeng/api";
-import {Toast} from "primeng/toast";
 import {AccountCreate} from "../../interfaces/account-create.interface";
 import {AccountStore} from "../../services/account-store.service";
 import {Router} from "@angular/router";
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 @Component({
   selector: 'app-account-form',
@@ -17,7 +17,7 @@ import {Router} from "@angular/router";
     FormsModule,
     ReactiveFormsModule,
     FormErrorLabelComponent,
-    Toast,
+    ColorPickerModule
   ],
   providers:[
     MessageService,
@@ -28,11 +28,13 @@ import {Router} from "@angular/router";
 export default class AccountFormComponent {
   private fb = inject(FormBuilder);
   private accountTypeService = inject(AccountTypeService);
-  private currencyService = inject(CurrencyService);
+  private currencyService = inject(CurrencyService); 
   private institutionService = inject(InstitutionService);
   private accountStore = inject(AccountStore);
   private messageService = inject(MessageService);
   private router = inject(Router);
+  
+  isLoading = this.accountStore.isLoading
   
   accountTypes =  toSignal(
     this.accountTypeService.get(),
@@ -57,7 +59,7 @@ export default class AccountFormComponent {
     accountTypeId: ['',[Validators.required]],
     currencyId: ['',[Validators.required]],
     institutionId: ['',[Validators.required]],
-    color: ['',[Validators.required]],
+    color: ['#ff0066',[Validators.required]],
   })
   
   get currentForm() : AccountCreate {

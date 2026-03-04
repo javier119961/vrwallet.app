@@ -11,6 +11,7 @@
       "@shared/*": ["./src/app/shared/*"],
       "@auth" : ["./src/app/feature/auth"],
       "@account" : ["./src/app/feature/account"],
+      "@transaction" : ["./src/app/feature/transaction"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

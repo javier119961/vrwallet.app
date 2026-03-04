@@ -5,6 +5,7 @@ import {Account} from "../interfaces/account.interface";
 import {map, Observable} from "rxjs";
 import {ApiResponse} from "@core/Interfaces/api-response.interface";
 import {AccountCreate} from "../interfaces/account-create.interface";
+import {Transaction} from "../../transaction/interfaces/transaction.interface";
 
 @Injectable({
   providedIn: 'root',
@@ -22,5 +23,15 @@ export class AccountService {
   public add(account: AccountCreate) : Observable<Account>{
     return this.http.post<ApiResponse<Account>>(`${this.baseUrl}/account`,account)
       .pipe(map(res=>res.data))
+  }
+  
+  public getById(id:string){
+     return this.http.get<ApiResponse<Account>>(`${this.baseUrl}/account/${id}`)
+       .pipe(map(res => res.data))
+  }
+
+  public getTransactions(id: string): Observable<Transaction[]> {
+    return this.http.get<ApiResponse<Transaction[]>>(`${this.baseUrl}/account/${id}/transactions`)
+      .pipe(map(res => res.data));
   }
 }

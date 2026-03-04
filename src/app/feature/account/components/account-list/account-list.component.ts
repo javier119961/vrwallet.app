@@ -1,18 +1,20 @@
-import {Component, input} from '@angular/core';
-import {Account} from "../../interfaces/account.interface";
+import {Component, inject} from '@angular/core';
 import {AccountItemComponent} from "../account-item/account-item.component";
 import {RouterLink} from "@angular/router";
+import {AccountStore} from "../../services/account-store.service";
+import {ProgressSpinner} from "primeng/progressspinner";
 
 @Component({
   selector: 'app-account-list',
   standalone: true,
   imports: [
     AccountItemComponent,
-    RouterLink
+    RouterLink,
+    ProgressSpinner
   ],
   templateUrl: './account-list.component.html',
   styles: ``,
 })
 export class AccountListComponent {
-  accounts = input.required<Account[]>();
+  accountStore = inject(AccountStore)
 }
