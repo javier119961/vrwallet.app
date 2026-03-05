@@ -8,7 +8,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { distinctUntilChanged, pipe, switchMap, tap } from 'rxjs';
+import { pipe, switchMap, take, tap} from 'rxjs';
 import { inject } from '@angular/core';
 import { AccountService } from './account.service';
 import { tapResponse } from '@ngrx/operators';
@@ -46,7 +46,7 @@ export const AccountStore = signalStore(
     ) => ({
       loadAccounts: rxMethod<void>(
         pipe(
-          distinctUntilChanged(),
+          take(1),
           tap(() => patchState(store, { isLoading: true })),
           switchMap(() => {
             return accountService.getAccounts().pipe(
@@ -64,7 +64,7 @@ export const AccountStore = signalStore(
       ),
       addAccount: rxMethod<AccountCreate>(
         pipe(
-          distinctUntilChanged(),
+          take(1),
           tap(() => patchState(store, { isLoading: true })),
           switchMap((account) => {
             return accountService.add(account).pipe(

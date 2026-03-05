@@ -1,4 +1,4 @@
-export interface Deposit {
+interface Operation{
   accountId: string;
   categoryId?: string;
   amount: number;
@@ -6,3 +6,12 @@ export interface Deposit {
   note?: string;
   payer?: string;
 }
+
+export interface Income extends Operation {}
+
+export interface Expense extends Operation {}
+
+export type Transfer = Omit<Operation, 'categoryId'> & {
+  destinationAccountId :string;
+}
+

@@ -22,10 +22,8 @@ export class AccountTransactionItemComponent {
         return 'ki-arrow-up-right';
 
       case Type.Expense:
-        return 'ki-arrow-down-left';
-
       case Type.Transfer:
-        return 'ki-arrow-up-right';
+        return 'ki-arrow-down-left';
 
       default:
         return 'ki-arrow-up-right';
@@ -45,9 +43,6 @@ export class AccountTransactionItemComponent {
       case Type.Transfer:
         return 'Transferencia';
 
-      case Type.Yield:
-        return 'Rendimiento';
-
       default:
         return 'Transacción';
     }
@@ -58,7 +53,6 @@ export class AccountTransactionItemComponent {
 
     switch (type) {
       case Type.Income:
-      case Type.Yield:
         return 'bg-green-100 text-green-600 group-hover:bg-green-200';
 
       case Type.Expense:

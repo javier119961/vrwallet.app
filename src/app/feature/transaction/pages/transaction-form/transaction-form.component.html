@@ -2,7 +2,7 @@
   <div class="kt-card">
     <div class="kt-card-header">
       <div class="kt-card-heading">
-        <h2 class="kt-card-title">Transaction Form</h2>
+        <h2 class="kt-card-title">Transactions</h2>
       </div>
     </div>
     <div class="kt-card-content py-3 grid gap-5">
@@ -12,30 +12,34 @@
         class="grid grid-cols-6 gap-4"
       >
         <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
-          <span class="kt-form-label w-full">
-            Monto
-            <span class="text-red-600"> * </span>
-          </span>
+          <label class="kt-form-label w-full">
+            Tipo de transacción
+            <span class="text-red-600">*</span>
+          </label>
           <div class="grow w-full">
             <p-selectbutton
               [options]="stateOptions"
+              formControlName="type"
               size="small"
               fluid
               optionLabel="label"
+              (onChange)="onChange($event)"
               optionValue="value"
-              aria-labelledby="basic"
             >
             </p-selectbutton>
           </div>
         </div>
         <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
-          <span class="kt-form-label w-full"> Cuenta </span>
+          <label class="kt-form-label w-full"> 
+            Cuenta
+            <span class="text-red-600">*</span>
+          </label>
           <div class="grow w-full">
             <select
               formControlName="accountId"
               class="kt-select"
               data-kt-select="true"
-              data-kt-select-placeholder="Select a framework"
+              data-kt-select-placeholder="Select a account"
               data-kt-select-config='{
                   "optionsClass": "kt-scrollable overflow-auto max-h-[250px]"
                 }'
@@ -44,10 +48,14 @@
                 <option [value]="account.id">{{ account.name }}</option>
               }
             </select>
+            <vrw-form-error-label [control]="form.get('accountId')"/>
           </div>
         </div>
         <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
-          <span class="kt-form-label w-full"> Monto </span>
+          <label class="kt-form-label w-full">
+            Monto
+            <span class="text-red-600">*</span>
+          </label>
           <div class="grow w-full">
             <p-inputNumber
               inputId="currency-us"
@@ -59,31 +67,59 @@
               locale="en-US"
             >
             </p-inputNumber>
+            <vrw-form-error-label [control]="form.get('amount')"/>
           </div>
         </div>
-        <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
-          <span class="kt-form-label w-full"> Categoria </span>
-          <div class="grow w-full">
-            <input
-              class="kt-input w-full"
-              placeholder=""
-              type="text"
-              value="jason@studio.io"
-            />
+
+        @if (form.get('type')?.value === Type.Transfer) {
+          <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
+            <label class="kt-form-label w-full">
+              Cuenta destino
+              <span class="text-red-600">*</span>
+            </label>
+            <div class="grow w-full">
+              <select
+                  formControlName="destinationAccountId"
+                  class="kt-select"
+                  data-kt-select="true"
+                  data-kt-select-placeholder="Select a framework"
+                  data-kt-select-config='{
+                  "optionsClass": "kt-scrollable overflow-auto max-h-[250px]"
+                }'
+              >
+                @for (account of accountsByTransfer; track account.id) {
+                  <option [value]="account.id">{{ account.name }}</option>
+                }
+              </select>
+            </div>
           </div>
-        </div>
+        }@else{
+          <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
+            <span class="kt-form-label w-full"> Categoria </span>
+            <div class="grow w-full">
+              <input
+                  class="kt-input w-full"
+                  placeholder=""
+                  type="text"
+              />
+            </div>
+          </div>
+        }
+        
         <div class="flex items-center flex-col gap-2 sm:col-span-1 col-span-6">
-          <span class="kt-form-label w-full"> Fecha </span>
+          <span class="kt-form-label w-full">
+            Fecha
+            <span class="text-red-600">*</span>
+          </span>
           <div class="grow w-full">
             <input
               formControlName="date"
               class="kt-input w-full"
-              placeholder=""
               type="datetime-local"
-              value="jason@studio.io"
             />
+            <vrw-form-error-label [control]="form.get('date')"/>
           </div>
-        </div>
+        </div> 
         <div class="flex items-center flex-col gap-2 sm:col-span-3 col-span-6">
           <span class="kt-form-label w-full"> Nota </span>
           <div class="grow w-full">
@@ -92,8 +128,8 @@
               class="kt-input w-full"
               placeholder=""
               type="text"
-              value="jason@studio.io"
             />
+            <vrw-form-error-label [control]="form.get('note')"/>
           </div>
         </div>
         <div class="flex items-center flex-col gap-2 sm:col-span-3 col-span-6">
@@ -104,7 +140,6 @@
               class="kt-input w-full"
               placeholder=""
               type="text"
-              value="jason@studio.io"
             />
           </div>
         </div>
@@ -114,8 +149,25 @@
           <button type="button" class="kt-btn kt-btn-secondary w-1/2">
             Cancelar
           </button>
-          <button [disabled]="form.invalid" type="submit" class="kt-btn w-1/2">
-            Agregar
+          <button 
+              [disabled]="form.invalid" 
+              type="submit" 
+              class="kt-btn w-1/2"
+              [ngClass]="buttonClass">
+            @switch (form.get('type')?.value) {
+              @case (Type.Income) {
+                <span class="font-semibold">Registrar Ingreso</span>
+              }
+              @case (Type.Expense) {
+                <span class="font-semibold">Registrar Gasto</span>
+              }
+              @case (Type.Transfer) {
+                <span class="font-semibold">Registrar Transferencia</span>
+              }
+              @default {
+                <span class="font-semibold">Selecciona el tipo de transacción</span>
+              }
+            }
           </button>
         </div>
       </form>
