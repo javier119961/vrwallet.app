@@ -1,5 +1,5 @@
 import {CommonModule, Location} from '@angular/common';
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {AccountStore} from '../../../account/services/account-store.service';
@@ -10,8 +10,12 @@ import {MessageService} from 'primeng/api';
 import {Account} from "../../../account/interfaces/account.interface";
 import {FormErrorLabelComponent} from "@shared/components/form-error-label/form-error-label.component";
 import {Transaction, Type} from "../../interfaces/transaction.interface";
-import {Observable, take} from "rxjs";
-import {Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {toSignal} from "@angular/core/rxjs-interop";
+import {CategoryService} from "@core/services/category.service";
+import {AutoComplete, AutoCompleteCompleteEvent} from "primeng/autocomplete";
+import {Category} from "@core/Interfaces/category.interface";
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'vrw-transaction-form',
@@ -22,6 +26,8 @@ import {Router} from "@angular/router";
     SelectButtonModule,
     ReactiveFormsModule,
     FormErrorLabelComponent,
+    AutoComplete,
+    DatePickerModule
   ],
   templateUrl: './transaction-form.component.html',
   styles: ``,
@@ -29,14 +35,21 @@ import {Router} from "@angular/router";
 export default class TransactionFormComponent {
   private fb = inject(FormBuilder);
   private transactionService = inject(TransactionService);
+  private categoryService = inject(CategoryService);
   private messageService = inject(MessageService);
   protected readonly Type = Type;
   accountStore = inject(AccountStore);
+
+  filteredCategories  = signal<Category[]>([]);
+  filteredAccounts = signal<Account[]>([]);
+  categories = toSignal(this.categoryService.get(), {
+    initialValue: [] 
+  });
   
   form = this.fb.group({
     accountId: ['', Validators.required],
     destinationAccountId:[null],
-    categoryId: [null],
+    categoryId: ['',Validators.required],
     amount: [0, [
       Validators.required,
       Validators.min(1)
@@ -52,11 +65,7 @@ export default class TransactionFormComponent {
     { label: 'Income', value: Type.Income },
     { label: 'Transfer', value: Type.Transfer },
   ];
-
-  get accountsByTransfer() : Account[] {
-    return this.accountStore.accounts().filter(account => account.id !== this.currentTransfer.accountId);
-  }
-
+  
   get currentIncome(): Income {
     return this.form.value as Income;
   }
@@ -83,6 +92,43 @@ export default class TransactionFormComponent {
 
   constructor(private location: Location) {}
 
+  filterCategory(event: AutoCompleteCompleteEvent) {
+    const query = event.query.toLowerCase();
+
+    const filter = this.categories().filter(category =>
+      category.name.toLowerCase().startsWith(query)
+    );
+    
+    this.filteredCategories.set(filter);
+  }
+
+  filterAccount(event: AutoCompleteCompleteEvent, isDestination: boolean = false) {
+    const query = event.query.toLowerCase();
+
+    const type = this.form.get('type')?.value;
+    const destinationControl = this.form.get('destinationAccountId');
+
+    if (
+      !isDestination &&
+      type === Type.Transfer &&
+      this.currentTransfer.destinationAccountId
+    ) {
+      destinationControl?.reset();
+    }
+
+    const accounts = this.accountStore.accounts();
+
+    const filtered = accounts.filter(account => {
+      
+      const matchesQuery = account.name.toLowerCase().startsWith(query);
+      const validDestination = !isDestination || account.id !== this.currentTransfer.accountId;
+
+      return matchesQuery && validDestination;
+    });
+
+    this.filteredAccounts.set(filtered);
+  }
+  
   onChange({ value }: any) {
     const destControl = this.form.get('destinationAccountId');
     if (value === Type.Transfer) {

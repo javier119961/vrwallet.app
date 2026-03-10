@@ -30,24 +30,27 @@
           </div>
         </div>
         <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
-          <label class="kt-form-label w-full"> 
+          <label class="kt-form-label w-full" for="account"> 
             Cuenta
             <span class="text-red-600">*</span>
           </label>
           <div class="grow w-full">
-            <select
-              formControlName="accountId"
-              class="kt-select"
-              data-kt-select="true"
-              data-kt-select-placeholder="Select a account"
-              data-kt-select-config='{
-                  "optionsClass": "kt-scrollable overflow-auto max-h-[250px]"
-                }'
-            >
-              @for (account of accountStore.accounts(); track account.id) {
-                <option [value]="account.id">{{ account.name }}</option>
-              }
-            </select>
+            <p-autocomplete
+                size="small"
+                fluid
+                inputId="account"
+                optionValue="id"
+                formControlName="accountId"
+                [dropdown]="true"
+                [suggestions]="filteredAccounts()"
+                (completeMethod)="filterAccount($event)"
+                optionLabel="name">
+              <ng-template let-account #item>
+                <div class="flex items-center gap-2">
+                  <div>{{ account.name }}</div>
+                </div>
+              </ng-template>
+            </p-autocomplete>
             <vrw-form-error-label [control]="form.get('accountId')"/>
           </div>
         </div>
@@ -73,57 +76,68 @@
 
         @if (form.get('type')?.value === Type.Transfer) {
           <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
-            <label class="kt-form-label w-full">
+            <label class="kt-form-label w-full" for="destinationAccount">
               Cuenta destino
               <span class="text-red-600">*</span>
             </label>
             <div class="grow w-full">
-              <select
+              <p-autocomplete
+                  size="small"
+                  fluid
+                  inputId="destinationAccount"
+                  optionValue="id"
                   formControlName="destinationAccountId"
-                  class="kt-select"
-                  data-kt-select="true"
-                  data-kt-select-placeholder="Select a framework"
-                  data-kt-select-config='{
-                  "optionsClass": "kt-scrollable overflow-auto max-h-[250px]"
-                }'
-              >
-                @for (account of accountsByTransfer; track account.id) {
-                  <option [value]="account.id">{{ account.name }}</option>
-                }
-              </select>
+                  [dropdown]="true"
+                  [suggestions]="filteredAccounts()"
+                  (completeMethod)="filterAccount($event, true)"
+                  optionLabel="name">
+                <ng-template let-account #item>
+                  <div class="flex items-center gap-2">
+                    <div>{{ account.name }}</div>
+                  </div>
+                </ng-template>
+              </p-autocomplete>
             </div>
           </div>
         }@else{
           <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
-            <span class="kt-form-label w-full"> Categoria </span>
+            <label class="kt-form-label w-full" for="category"> Categoria </label>
             <div class="grow w-full">
-              <input
-                  class="kt-input w-full"
-                  placeholder=""
-                  type="text"
-              />
+              <p-autocomplete
+                  size="small"
+                  fluid
+                  optionValue="id"
+                  inputId="category"
+                  formControlName="categoryId"
+                  [dropdown]="true"
+                  [suggestions]="filteredCategories()"
+                  (completeMethod)="filterCategory($event)" optionLabel="name">
+                <ng-template let-category #item>
+                  <div class="flex items-center gap-2">
+                    <div>{{ category.name }}</div>
+                  </div>
+                </ng-template>
+              </p-autocomplete>
+              <vrw-form-error-label [control]="form.get('categoryId')"/>
             </div>
           </div>
         }
         
         <div class="flex items-center flex-col gap-2 sm:col-span-1 col-span-6">
-          <span class="kt-form-label w-full">
+          <label for="date" class="kt-form-label w-full">
             Fecha
             <span class="text-red-600">*</span>
-          </span>
+          </label>
           <div class="grow w-full">
-            <input
-              formControlName="date"
-              class="kt-input w-full"
-              type="datetime-local"
-            />
+            <p-datepicker size="small" inputId="date" formControlName="date" [showTime]="true" hourFormat="12"></p-datepicker>
             <vrw-form-error-label [control]="form.get('date')"/>
           </div>
         </div> 
         <div class="flex items-center flex-col gap-2 sm:col-span-3 col-span-6">
-          <span class="kt-form-label w-full"> Nota </span>
+          <label class="kt-form-label w-full" for="note"> Nota </label>
           <div class="grow w-full">
             <input
+              id="note"
               formControlName="note"
               class="kt-input w-full"
               placeholder=""
@@ -133,9 +147,12 @@
           </div>
         </div>
         <div class="flex items-center flex-col gap-2 sm:col-span-3 col-span-6">
-          <span class="kt-form-label w-full"> Pagador </span>
+          <label class="kt-form-label w-full" for="payer">
+            Pagador 
+          </label>
           <div class="grow w-full">
             <input
+              id="payer"
               formControlName="payer"
               class="kt-input w-full"
               placeholder=""
