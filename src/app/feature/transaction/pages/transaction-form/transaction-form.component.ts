@@ -30,7 +30,9 @@ export default class TransactionFormComponent {
   private fb = inject(FormBuilder);
   private transactionService = inject(TransactionService);
   private messageService = inject(MessageService);
+  private router = inject(Router);
   protected readonly Type = Type;
+  
   accountStore = inject(AccountStore);
   
   form = this.fb.group({
@@ -105,13 +107,13 @@ export default class TransactionFormComponent {
 
     request$[this.form.get('type')?.value!]
       .subscribe({
-        next: () => {
+        next: (transaction:Transaction) => {
           this.messageService.add({
             severity: 'success',
             detail: 'La transaccion se ha llevado acabo con exito.',
           });
           this.accountStore.loadAccounts();
-          this.location.back();
+          this.router.navigate(['/accounts',transaction.accountId]).then();
         },
         error: (error: any) => {
           //todo error aplicar interceptor, mensaje de error por cantidad insuficiente 
