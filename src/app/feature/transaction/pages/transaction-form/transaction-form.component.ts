@@ -16,6 +16,7 @@ import {CategoryService} from "@core/services/category.service";
 import {AutoComplete, AutoCompleteCompleteEvent} from "primeng/autocomplete";
 import {Category} from "@core/Interfaces/category.interface";
 import { DatePickerModule } from 'primeng/datepicker';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'vrw-transaction-form',
