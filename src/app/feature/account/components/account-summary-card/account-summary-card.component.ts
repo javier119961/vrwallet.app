@@ -47,7 +47,5 @@ export class AccountSummaryCardComponent {
     if (percentage < 0) return '#ff0000';
     return '#656565';
   }
-
-
   
 }
