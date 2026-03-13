@@ -33,7 +33,7 @@ export class AccountSummaryChartComponent {
         {
           color: this.color(),
           name: "Amount",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+          data: [10, 41, 35, 51, 49, 62, 69, 91, 148,10, 41, 35, 51, 49, 62, 69, 91, 148]
         }
       ],
       chart: {
@@ -44,7 +44,7 @@ export class AccountSummaryChartComponent {
         text: "Account yields"
       },
       xaxis: {
-        categories: ["Jan", "Feb",  "Mar",  "Apr",  "May",  "Jun",  "Jul",  "Aug", "Sep"]
+        categories: ["Jan", "Feb",  "Mar",  "Apr",  "May",  "Jun",  "Jul",  "Aug", "Sep","Jan", "Feb",  "Mar",  "Apr",  "May",  "Jun",  "Jul",  "Aug", "Sep"]
       }
     }
   });

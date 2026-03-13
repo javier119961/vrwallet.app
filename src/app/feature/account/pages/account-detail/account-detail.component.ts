@@ -27,7 +27,6 @@ import {AccountSummaryChartComponent} from "../../components/account-summary-cha
   templateUrl: './account-detail.component.html',
 })
 export default class AccountDetailComponent {
-  
   public id = input.required<string>();
 
   private accountService = inject(AccountService);
@@ -51,6 +50,4 @@ export default class AccountDetailComponent {
       light: `${color}1A`
     };
   });
-
-  protected readonly statusbar = statusbar;
 }
