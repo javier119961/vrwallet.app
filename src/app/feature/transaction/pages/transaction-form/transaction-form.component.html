@@ -40,10 +40,9 @@
             </span>
           </div>
           <div class="grow w-full">
-            <p-autocomplete
+            <p-autoComplete
                 size="small"
                 fluid
-                [typeahead]="false"
                 inputId="account"
                 optionValue="id"
                 formControlName="accountId"
@@ -63,7 +62,7 @@
                   </span>
                 </div>
               </ng-template>
-            </p-autocomplete>
+            </p-autoComplete>
             <vrw-form-error-label [control]="form.get('accountId')"/>
           </div>
         </div>
@@ -94,7 +93,7 @@
               <span class="text-red-600">*</span>
             </label>
             <div class="grow w-full">
-              <p-autocomplete
+              <p-autoComplete
                   size="small"
                   fluid
                   inputId="destinationAccount"
@@ -109,14 +108,14 @@
                     <div>{{ account.name }}</div>
                   </div>
                 </ng-template>
-              </p-autocomplete>
+              </p-autoComplete>
             </div>
           </div>
         }@else{
           <div class="flex items-center flex-col gap-2 sm:col-span-2 col-span-6">
             <label class="kt-form-label w-full" for="category"> Categoria </label>
             <div class="grow w-full">
-              <p-autocomplete
+              <p-autoComplete
                   size="small"
                   fluid
                   optionValue="id"
@@ -125,12 +124,12 @@
                   [dropdown]="true"
                   [suggestions]="filteredCategories()"
                   (completeMethod)="filterCategory($event)" optionLabel="name">
-                <ng-template let-category #item>
+                <ng-template let-category>
                   <div class="flex items-center gap-2">
                     <div>{{ category.name }}</div>
                   </div>
                 </ng-template>
-              </p-autocomplete>
+              </p-autoComplete>
               <vrw-form-error-label [control]="form.get('categoryId')"/>
             </div>
           </div>
@@ -142,10 +141,10 @@
             <span class="text-red-600">*</span>
           </label>
           <div class="grow w-full">
-            <p-datepicker 
+            <p-datePicker
                 fluid
                 size="small" inputId="date" formControlName="date"
-                          [showTime]="true" hourFormat="24" [maxDate]="maxDate()"></p-datepicker>
+                          [showTime]="true" hourFormat="24" [maxDate]="maxDate()"></p-datePicker>
             <vrw-form-error-label [control]="form.get('date')"/>
           </div>
         </div> 
