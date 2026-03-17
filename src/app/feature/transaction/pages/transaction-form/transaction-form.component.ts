@@ -1,22 +1,31 @@
-import {CommonModule, Location} from '@angular/common';
-import {Component, inject, signal} from '@angular/core';
-import {FormBuilder, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
-import {InputNumberModule} from 'primeng/inputnumber';
-import {AccountStore} from '../../../account/services/account-store.service';
-import {SelectButtonModule} from 'primeng/selectbutton';
-import {TransactionService} from '../../services/transaction.service';
-import {Expense, Income, Transfer} from '../../interfaces/deposit.interface';
-import {MessageService} from 'primeng/api';
-import {Account} from "../../../account/interfaces/account.interface";
-import {FormErrorLabelComponent} from "@shared/components/form-error-label/form-error-label.component";
-import {Transaction, Type} from "../../interfaces/transaction.interface";
-import {finalize, Observable} from "rxjs";
-import {toSignal} from "@angular/core/rxjs-interop";
-import {CategoryService} from "@core/services/category.service";
-import {AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent} from "primeng/autocomplete";
-import {Category} from "@core/Interfaces/category.interface";
+import { CommonModule, Location } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { AccountStore } from '../../../account/services/account-store.service';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TransactionService } from '../../services/transaction.service';
+import { Expense, Income, Transfer } from '../../interfaces/deposit.interface';
+import { MessageService } from 'primeng/api';
+import { Account } from '../../../account/interfaces/account.interface';
+import { FormErrorLabelComponent } from '@shared/components/form-error-label/form-error-label.component';
+import { Transaction, Type } from '../../interfaces/transaction.interface';
+import { finalize, Observable } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { CategoryService } from '@core/services/category.service';
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+  AutoCompleteSelectEvent,
+} from 'primeng/autocomplete';
+import { Category } from '@core/Interfaces/category.interface';
 import { DatePickerModule } from 'primeng/datepicker';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'vrw-transaction-form',
@@ -28,7 +37,7 @@ import {Router} from "@angular/router";
     ReactiveFormsModule,
     FormErrorLabelComponent,
     AutoComplete,
-    DatePickerModule
+    DatePickerModule,
   ],
   templateUrl: './transaction-form.component.html',
   styles: ``,
@@ -40,38 +49,35 @@ export default class TransactionFormComponent {
   private messageService = inject(MessageService);
   private router = inject(Router);
   protected readonly Type = Type;
-  
+
   accountStore = inject(AccountStore);
 
   maxDate = signal<Date>(new Date());
   loading = signal<boolean>(false);
-  accountSelected = signal<Account|null>(null);
-  filteredCategories  = signal<Category[]>([]);
+  accountSelected = signal<Account | null>(null);
+  filteredCategories = signal<Category[]>([]);
   filteredAccounts = signal<Account[]>([]);
   categories = toSignal(this.categoryService.get(), {
-    initialValue: [] 
+    initialValue: [],
   });
-  
+
   form = this.fb.group({
     accountId: ['', Validators.required],
-    destinationAccountId:[null],
-    categoryId: ['',Validators.required],
-    amount: [0, [
-      Validators.required,
-      Validators.min(1)
-    ]],
+    destinationAccountId: [null],
+    categoryId: ['', Validators.required],
+    amount: [0, [Validators.required, Validators.min(1)]],
     date: ['', Validators.required],
     note: ['', Validators.maxLength(100)],
     payer: ['', Validators.maxLength(100)],
-    type:[Type.Income, Validators.required]
+    type: [Type.Income, Validators.required],
   });
 
-  stateOptions: { label: string, value: Type } [] = [
+  stateOptions: { label: string; value: Type }[] = [
     { label: 'Expense', value: Type.Expense },
     { label: 'Income', value: Type.Income },
     { label: 'Transfer', value: Type.Transfer },
   ];
-  
+
   get currentIncome(): Income {
     return this.form.value as Income;
   }
@@ -85,12 +91,12 @@ export default class TransactionFormComponent {
   }
 
   get buttonClass(): string {
-    const type : Type = this.form.get('type')?.value!;
-    
+    const type: Type = this.form.get('type')?.value!;
+
     const statusClasses: Record<Type, string> = {
       [Type.Expense]: 'kt-btn-destructive',
       [Type.Income]: 'bg-green-600',
-      [Type.Transfer]: 'kt-btn-primary'
+      [Type.Transfer]: 'kt-btn-primary',
     };
 
     return statusClasses[type] || 'kt-btn-default';
@@ -101,14 +107,17 @@ export default class TransactionFormComponent {
   filterCategory(event: AutoCompleteCompleteEvent) {
     const query = event.query.toLowerCase();
 
-    const filter = this.categories().filter(category =>
-      category.name.toLowerCase().startsWith(query)
+    const filter = this.categories().filter((category) =>
+      category.name.toLowerCase().startsWith(query),
     );
-    
+
     this.filteredCategories.set(filter);
   }
 
-  filterAccount(event: AutoCompleteCompleteEvent, isDestination: boolean = false) {
+  filterAccount(
+    event: AutoCompleteCompleteEvent,
+    isDestination: boolean = false,
+  ) {
     const query = event.query.toLowerCase();
 
     const type = this.form.get('type')?.value;
@@ -124,25 +133,25 @@ export default class TransactionFormComponent {
 
     const accounts = this.accountStore.accounts();
 
-    const filtered = accounts.filter(account => {
-      
+    const filtered = accounts.filter((account) => {
       const matchesQuery = account.name.toLowerCase().startsWith(query);
-      const validDestination = !isDestination || account.id !== this.currentTransfer.accountId;
+      const validDestination =
+        !isDestination || account.id !== this.currentTransfer.accountId;
 
       return matchesQuery && validDestination;
     });
 
     this.filteredAccounts.set(filtered);
   }
-  
-  handleChangeAccount(account: AutoCompleteSelectEvent){
+
+  handleChangeAccount(account: AutoCompleteSelectEvent) {
     this.accountSelected.set(account.value);
   }
-  
+
   onChange({ value }: any) {
     const destControl = this.form.get('destinationAccountId');
     const categoryControl = this.form.get('categoryId');
-    
+
     if (value === Type.Transfer) {
       destControl?.setValidators([Validators.required]);
       categoryControl?.clearValidators();
@@ -158,30 +167,28 @@ export default class TransactionFormComponent {
 
   handleSubmit(): void {
     if (this.form.invalid) return;
-    
+
     this.loading.set(true);
-    
-    const request$: Record<Type,Observable<Transaction>> = {
+
+    const request$: Record<Type, Observable<Transaction>> = {
       [Type.Expense]: this.transactionService.expense(this.currentExpense),
-      [Type.Income]:this.transactionService.add(this.currentIncome),
-      [Type.Transfer]:this.transactionService.transfer(this.currentTransfer)
-    }
-    
+      [Type.Income]: this.transactionService.add(this.currentIncome),
+      [Type.Transfer]: this.transactionService.transfer(this.currentTransfer),
+    };
+
     request$[this.form.get('type')?.value!]
-      .pipe(
-        finalize(()=>this.loading.set(false))
-      )
+      .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: (transaction:Transaction) => {
+        next: (transaction: Transaction) => {
           this.messageService.add({
             severity: 'success',
             detail: 'La transaccion se ha llevado acabo con exito.',
           });
           this.accountStore.loadAccounts();
-          this.router.navigate(['/accounts',transaction.accountId]).then();
+          this.router.navigate(['/accounts', transaction.accountId]).then();
         },
         error: (error: any) => {
-          //todo error aplicar interceptor, mensaje de error por cantidad insuficiente 
+          //todo error aplicar interceptor, mensaje de error por cantidad insuficiente
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -190,8 +197,8 @@ export default class TransactionFormComponent {
         },
       });
   }
-  
-  handleCancel(){
+
+  handleCancel() {
     this.location.back();
   }
 }

@@ -12,7 +12,6 @@ export class AccountTypeService {
   private readonly baseUrl = environment.baseUrl;
 
   get(): Observable<AccountType[]> {
-    return this.http
-      .get<AccountType[]>(`${this.baseUrl}/account-type`);
+    return this.http.get<AccountType[]>(`${this.baseUrl}/account-type`);
   }
 }

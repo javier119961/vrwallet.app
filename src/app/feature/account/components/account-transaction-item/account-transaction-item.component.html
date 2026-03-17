@@ -24,10 +24,10 @@
     <span class="font-bold text-sm">
       @if (typeOperation() == 0) {
         <i class="ki-filled ki-plus"></i>
-      }@else{
+      } @else {
         <i class="ki-filled ki-minus"></i>
       }
     </span>
-     {{ transaction().amount | currency:'MXN' }}
+    {{ transaction().amount | currency: "MXN" }}
   </div>
 </div>

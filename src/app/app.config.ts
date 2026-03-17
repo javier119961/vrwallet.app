@@ -8,7 +8,7 @@ import { definePreset } from '@primeuix/themes';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { unauthorizedInterceptor } from '@core/interceptors/unauthorized.interceptor';
 import { MessageService } from 'primeng/api';
-import {responseInterceptor} from "@core/interceptors/response.interceptor";
+import { responseInterceptor } from '@core/interceptors/response.interceptor';
 
 const Noir = definePreset(Aura, {
   semantic: {
@@ -64,7 +64,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     MessageService,
     provideHttpClient(
-      withInterceptors([authInterceptor, unauthorizedInterceptor,responseInterceptor]),
+      withInterceptors([
+        authInterceptor,
+        unauthorizedInterceptor,
+        responseInterceptor,
+      ]),
     ),
     providePrimeNG({
       theme: {

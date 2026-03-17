@@ -1,10 +1,13 @@
-import {Component, computed, input} from '@angular/core';
-import {Transaction, Type,} from '../../../transaction/interfaces/transaction.interface';
-import {CurrencyPipe, DatePipe} from '@angular/common';
+import { Component, computed, input } from '@angular/core';
+import {
+  Transaction,
+  Type,
+} from '../../../transaction/interfaces/transaction.interface';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 enum Operation {
   Incoming,
-  Outgoing
+  Outgoing,
 }
 
 @Component({
@@ -16,18 +19,19 @@ enum Operation {
 export class AccountTransactionItemComponent {
   accountId = input.required<string>();
   transaction = input.required<Transaction>();
-  
+
   typeOperation = computed(() => {
     return this.transaction().type === Type.Income ||
-      (this.transaction().type === Type.Transfer && this.transaction().destinationAccountId == this.accountId() ) 
-      ? Operation.Incoming 
-      : Operation.Outgoing
+      (this.transaction().type === Type.Transfer &&
+        this.transaction().destinationAccountId == this.accountId())
+      ? Operation.Incoming
+      : Operation.Outgoing;
   });
-  
+
   icon = computed(() => {
-    if (this.typeOperation() === Operation.Incoming){
+    if (this.typeOperation() === Operation.Incoming) {
       return 'ki-arrow-up-right';
-    }else{
+    } else {
       return 'ki-arrow-down-left';
     }
   });

@@ -12,7 +12,6 @@ export class CurrencyService {
   private readonly baseUrl = environment.baseUrl;
 
   get(): Observable<Currency[]> {
-    return this.http
-      .get<Currency[]>(`${this.baseUrl}/currency`);
+    return this.http.get<Currency[]>(`${this.baseUrl}/currency`);
   }
 }
