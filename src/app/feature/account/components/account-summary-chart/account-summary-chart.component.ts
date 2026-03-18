@@ -1,5 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { CardComponent } from '@shared/components/card/card.component';
+import { AccountBalance } from '../../interfaces/account-balance.interface';
 
 import {
   ChartComponent,
@@ -23,17 +24,19 @@ export type ChartOptions = {
 })
 export class AccountSummaryChartComponent {
   color = input.required<string>();
+  balances = input<AccountBalance[]>([]);
 
   chartOpts = computed<Partial<ChartOptions>>(() => {
+    const data = this.balances() || [];
+    const seriesData = data.map((b) => b.balance);
+    const categories = data.map((b) => b.date);
+
     return {
       series: [
         {
           color: this.color(),
-          name: 'Amount',
-          data: [
-            10, 41, 35, 51, 49, 62, 69, 91, 148, 10, 41, 35, 51, 49, 62, 69, 91,
-            148,
-          ],
+          name: 'Balance',
+          data: seriesData,
         },
       ],
       chart: {
@@ -41,29 +44,10 @@ export class AccountSummaryChartComponent {
         type: 'area',
       },
       title: {
-        text: 'Account yields',
+        text: 'Account Balance (Last 7 Days)',
       },
       xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-        ],
+        categories: categories,
       },
     };
   });
