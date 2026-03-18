@@ -1,11 +1,24 @@
 <vrw-card>
   <div style="text-align: center; width: 100%">
+    <div class="w-full my-4">
+      <p-selectButton
+          fluid 
+          size="small" 
+          [options]="stateOptions" 
+          optionLabel="label"
+          (onChange)="changeOption($event.value)"
+          optionValue="value">
+      </p-selectButton>
+    </div>
+
     <apx-chart
       [series]="chartOpts().series!"
       [chart]="chartOpts().chart!"
       [xaxis]="chartOpts().xaxis!"
       [title]="chartOpts().title!"
+      [dataLabels]="chartOpts().dataLabels!"
     >
     </apx-chart>
   </div>
 </vrw-card>
+        

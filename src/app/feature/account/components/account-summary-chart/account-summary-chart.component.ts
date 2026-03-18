@@ -1,33 +1,47 @@
-import { Component, computed, input } from '@angular/core';
+import {Component, computed, inject, input, signal} from '@angular/core';
 import { CardComponent } from '@shared/components/card/card.component';
-import { AccountBalance } from '../../interfaces/account-balance.interface';
 
 import {
   ChartComponent,
   ApexAxisChartSeries,
   ApexChart,
   ApexXAxis,
-  ApexTitleSubtitle,
+  ApexTitleSubtitle, ApexDataLabels,
 } from 'ng-apexcharts';
+import {rxResource} from "@angular/core/rxjs-interop";
+import {AccountService} from "../../services/account.service";
+import {SelectButton} from "primeng/selectbutton";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   xaxis: ApexXAxis;
   title: ApexTitleSubtitle;
+  dataLabels: ApexDataLabels;
 };
 
 @Component({
   selector: 'vrw-account-summary-chart',
-  imports: [CardComponent, ChartComponent],
+  imports: [CardComponent, ChartComponent, SelectButton],
   templateUrl: './account-summary-chart.component.html',
 })
 export class AccountSummaryChartComponent {
+  id = input.required<string>();
   color = input.required<string>();
-  balances = input<AccountBalance[]>([]);
+
+  private accountService = inject(AccountService);
+  
+  stateOptions : { label: string; value: number }[] = [
+    { label: '7 dias', value:  7},
+    { label: '30 dias', value: 30 },
+    { label: '12 semanas', value: 84 },
+    { label: '6 meses', value: 182 },
+    { label: '1 año', value: 365 },
+  ]
 
   chartOpts = computed<Partial<ChartOptions>>(() => {
-    const data = this.balances() || [];
+    const data = this.dailyBalanceResource.value() || [];
+
     const seriesData = data.map((b) => b.balance);
     const categories = data.map((b) => b.date);
 
@@ -39,9 +53,21 @@ export class AccountSummaryChartComponent {
           data: seriesData,
         },
       ],
+      dataLabels:{
+        enabled: false
+      },
       chart: {
         height: 350,
+        stacked: false,
         type: 'area',
+        zoom: {
+          type: "x",
+          enabled: true,
+          autoScaleYaxis: true
+        },
+        toolbar: {
+          autoSelected: "zoom"
+        }
       },
       title: {
         text: 'Account Balance (Last 7 Days)',
@@ -50,5 +76,24 @@ export class AccountSummaryChartComponent {
         categories: categories,
       },
     };
+  });
+  optionSelected = signal<number>(7);
+
+  changeOption(value: number){
+    this.optionSelected.set(value)
+  }
+  
+  dailyBalanceResource = rxResource({
+    params: () => ({ 
+      id: this.id(),
+      days : this.optionSelected()
+    }),
+    stream: ({ params }) => {
+      const today = new Date();
+      const lastWeek = new Date(today);
+      lastWeek.setDate(today.getDate() - params.days);
+      const startDate = lastWeek.toISOString().split('T')[0];
+      return this.accountService.getDailyBalance(params.id, startDate);
+    },
   });
 }

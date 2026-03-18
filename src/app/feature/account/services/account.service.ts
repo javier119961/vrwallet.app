@@ -40,7 +40,7 @@ export class AccountService {
   }
   
   public getDailyBalance(id: string,startDate: string) : Observable<AccountBalance[]>{
-    const params = new HttpParams().set('startDate', startDate);
+    const params = new HttpParams().set('date', startDate);
     return this.http.get<AccountBalance[]>(`${this.baseUrl}/account/${id}/daily-balance`, {params})
   }
 }
