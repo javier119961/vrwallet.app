@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -9,6 +9,7 @@ import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { unauthorizedInterceptor } from '@core/interceptors/unauthorized.interceptor';
 import { MessageService } from 'primeng/api';
 import { responseInterceptor } from '@core/interceptors/response.interceptor';
+import { provideServiceWorker } from '@angular/service-worker';
 
 const Noir = definePreset(Aura, {
   semantic: {
@@ -77,6 +78,9 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.my-app-dark',
         },
       },
-    }),
+    }), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
   ],
 };

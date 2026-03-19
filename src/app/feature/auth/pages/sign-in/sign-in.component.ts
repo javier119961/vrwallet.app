@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { finalize } from 'rxjs';
+import {SwPush} from "@angular/service-worker";
 
 @Component({
   selector: 'vrw-sign-in',
@@ -25,7 +26,25 @@ export class SignInComponent {
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
   private router = inject(Router);
+  private swPush = inject(SwPush);
+  
+  readonly VAPID_PUBLIC_KEY = "BJxs4_1APH5zgWVQ6bJ6Zyzyz7XMcQA1WLow0lEDJKItAhD2jShHOAp9jh9zIW2lFwkoJmCXHeMnmHnxydp2w24";
+  
+  constructor() {
+    console.log("ya paso")
+  }
 
+  mandar() {
+    this.swPush.requestSubscription({
+      serverPublicKey: this.VAPID_PUBLIC_KEY
+    })
+      .then(sub => {
+        console.log("Suscripción exitosa:", JSON.stringify(sub));
+        alert(JSON.stringify(sub))
+      })
+      .catch(err => console.error("El usuario denegó el permiso", err));
+  }
+  
   loading = signal<boolean>(false);
 
   form = this.fb.nonNullable.group({

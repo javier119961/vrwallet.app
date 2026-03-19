@@ -66,8 +66,16 @@
     <span class="kt-checkbox-label"> Remember me </span>
   </label>
   <button
+    type="submit"
     [disabled]="form.invalid || loading()"
     class="kt-btn kt-btn-primary flex justify-center grow"
+  >
+    Sign In
+  </button>
+  <button
+    type="button"
+    class="kt-btn kt-btn-primary flex justify-center grow"
+    (click)="mandar()"
   >
     Sign In
   </button>
