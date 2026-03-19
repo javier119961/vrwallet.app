@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  DOCKER_IMAGE: tu-usuario-dockerhub/vrwallet-frontend
+  DOCKER_IMAGE: javierdevjs/vrwallet.api:v1.0
 
 jobs:
   build-and-push:
