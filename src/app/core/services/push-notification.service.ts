@@ -11,7 +11,7 @@ export class PushNotificationService {
   private readonly endpoint = `${environment.baseUrl}/push-notifications`;
 
   subscribe(subscription: PushSubscription): Observable<any> {
-    return this.http.post(`${this.endpoint}/push-subscription`, subscription);
+    return this.http.post(`${this.endpoint}`, subscription);
   }
   
 }
