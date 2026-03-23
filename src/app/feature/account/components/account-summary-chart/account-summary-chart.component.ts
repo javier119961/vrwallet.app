@@ -5,7 +5,7 @@ import {
   ApexAxisChartSeries,
   ApexChart,
   ApexXAxis,
-  ApexTitleSubtitle, ApexDataLabels,
+  ApexTitleSubtitle, ApexDataLabels, ApexYAxis, ApexTooltip, ApexAnnotations,
 } from 'ng-apexcharts';
 import {rxResource} from "@angular/core/rxjs-interop";
 import {AccountService} from "../../services/account.service";
@@ -14,8 +14,11 @@ import {SelectButton} from "primeng/selectbutton";
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
+  tooltip: ApexTooltip;
   xaxis: ApexXAxis;
+  yaxis: ApexYAxis;
   title: ApexTitleSubtitle;
+  annotations: ApexAnnotations
   dataLabels: ApexDataLabels;
 };
 
@@ -69,9 +72,36 @@ export class AccountSummaryChartComponent {
           autoSelected: "zoom"
         }
       },
+      tooltip:{
+        
+      },
+      yaxis: {
+        labels: {
+          show: true ,
+          formatter: function(value) {
+            return "$" + value.toLocaleString('es-MX', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })
+          }
+        },
+        axisBorder: {
+          show: true
+        },
+        axisTicks: {
+          show: true
+        }
+      },
       xaxis: {
         categories: categories,
+        type: 'datetime',
+        labels: {
+          format: 'dd MMM'
+        }
       },
+      annotations:{
+
+      }
     };
   });
   optionSelected = signal<number>(7);
