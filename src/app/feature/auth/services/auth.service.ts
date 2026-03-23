@@ -49,6 +49,5 @@ export class AuthService {
     if (refresh){
       this.router.navigate(['/']).then();
     }
-      
   }
 }
