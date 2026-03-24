@@ -1,4 +1,4 @@
-import {Component, HostBinding, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding, inject} from '@angular/core';
 import {RouterOutlet} from "@angular/router";
 import {MetronicInitService} from "../../services/metronic-init.service";
 import {HeaderComponent} from "@shared/components/header/header.component";
@@ -13,7 +13,8 @@ import {environment} from "@env/environment";
   selector: 'vrw-main-layout',
   imports: [RouterOutlet,HeaderComponent, NavbarComponent, ToolbarComponent, FooterComponent, HeaderComponent],
   templateUrl: './main-layout.component.html',
-  styles: ``
+  styles: ``,
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class MainLayoutComponent {
   @HostBinding('class') bodyClass = 'flex grow flex-col in-data-kt-[sticky-header=on]:pt-(--header-height)';

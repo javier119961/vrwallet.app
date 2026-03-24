@@ -1,11 +1,16 @@
-import {Component, computed, inject, input, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, input, signal} from '@angular/core';
 
 import {
-  ChartComponent,
+  ApexAnnotations,
   ApexAxisChartSeries,
   ApexChart,
+  ApexDataLabels,
+  ApexGrid,
+  ApexTitleSubtitle,
+  ApexTooltip,
   ApexXAxis,
-  ApexTitleSubtitle, ApexDataLabels, ApexYAxis, ApexTooltip, ApexAnnotations,
+  ApexYAxis,
+  ChartComponent,
 } from 'ng-apexcharts';
 import {rxResource} from "@angular/core/rxjs-interop";
 import {AccountService} from "../../services/account.service";
@@ -13,6 +18,7 @@ import {SelectButton} from "primeng/selectbutton";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
+  grid :ApexGrid;
   chart: ApexChart;
   tooltip: ApexTooltip;
   xaxis: ApexXAxis;
@@ -24,13 +30,16 @@ export type ChartOptions = {
 
 @Component({
   selector: 'vrw-account-summary-chart',
+  
   imports: [ChartComponent, SelectButton],
   templateUrl: './account-summary-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountSummaryChartComponent {
   id = input.required<string>();
   color = input.required<string>();
-
+  today = input.required<{ date: string; balance: number }>();
+  
   private accountService = inject(AccountService);
   
   stateOptions : { label: string; value: number }[] = [
@@ -44,8 +53,10 @@ export class AccountSummaryChartComponent {
   chartOpts = computed<Partial<ChartOptions>>(() => {
     const data = this.dailyBalanceResource.value() || [];
 
-    const seriesData = data.map((b) => b.balance);
-    const categories = data.map((b) => b.date);
+    const normalized = [...data,this.today()];
+    
+    const seriesData = normalized.map((b) => b.balance)
+    const categories = normalized.map((b) => b.date);
 
     return {
       series: [
@@ -63,19 +74,20 @@ export class AccountSummaryChartComponent {
           enabled: true
         },
         height: 350,
+        width: '100%',
         stacked: false,
         type: 'area',
         zoom: {
           enabled: false,
         },
-        toolbar: {
-          autoSelected: "zoom"
-        }
+        toolbar: { show: false },
       },
       tooltip:{
         
       },
       yaxis: {
+        min: function(min) { return min * 0.9995 },
+        max: function(max) { return max * 1.0005 },
         labels: {
           show: true ,
           formatter: function(value) {
@@ -101,6 +113,12 @@ export class AccountSummaryChartComponent {
       },
       annotations:{
 
+      },
+      grid:{
+        padding: {
+          left: 5,
+          right: 10
+        }
       }
     };
   });

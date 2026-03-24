@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 
 @Component({
@@ -8,6 +8,7 @@ import {Router, RouterLink} from "@angular/router";
   ],
   templateUrl: './account-quick-actions.component.html',
   styles: ``,
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class AccountQuickActionsComponent {
   router = inject(Router);
