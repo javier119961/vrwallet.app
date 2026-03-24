@@ -1,8 +1,8 @@
-import { Component, computed, inject, input } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
-import { AccountService } from '../../services/account.service';
-import { CardComponent } from '@shared/components/card/card.component';
-import { CurrencyPipe, PercentPipe } from '@angular/common';
+import {ChangeDetectionStrategy, Component, computed, inject, input} from '@angular/core';
+import {rxResource} from '@angular/core/rxjs-interop';
+import {AccountService} from '../../services/account.service';
+import {CardComponent} from '@shared/components/card/card.component';
+import {CurrencyPipe, PercentPipe} from '@angular/common';
 
 @Component({
   selector: 'vrw-account-summary-card',
@@ -13,6 +13,7 @@ import { CurrencyPipe, PercentPipe } from '@angular/common';
       padding: 5px 0 !important;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountSummaryCardComponent {
   id = input.required<string>();

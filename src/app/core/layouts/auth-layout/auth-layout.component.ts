@@ -1,4 +1,4 @@
-import { Component, HostBinding } from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -6,7 +6,8 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   templateUrl: './auth-layout.component.html',
   styleUrl: './auth-layout.component.scss',
-  standalone: true
+  standalone: true,
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export default class AuthLayoutComponent {
   @HostBinding('class') hostClass = 'w-full grow';

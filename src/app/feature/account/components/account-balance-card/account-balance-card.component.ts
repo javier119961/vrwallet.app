@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {CurrencyPipe} from "@angular/common";
 import {AccountStore} from "../../services/account-store.service";
 
@@ -9,6 +9,7 @@ import {AccountStore} from "../../services/account-store.service";
   ],
   templateUrl: './account-balance-card.component.html',
   styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountBalanceCardComponent {
   accountStore = inject(AccountStore);

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
   selector: 'vrw-user-dropdown',
   imports: [],
   templateUrl: './user-dropdown.component.html',
-  styleUrl: './user-dropdown.component.scss'
+  styleUrl: './user-dropdown.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserDropdownComponent {
 
