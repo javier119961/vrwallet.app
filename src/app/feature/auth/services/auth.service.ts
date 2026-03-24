@@ -47,7 +47,7 @@ export class AuthService {
   public logout(refresh: boolean = false) {
     this.tokenService.clearTokens();
     if (refresh){
-      this.router.navigate(['/']).then();
+      this.router.navigate(['/auth/sign-in']).then();
     }
   }
 }
