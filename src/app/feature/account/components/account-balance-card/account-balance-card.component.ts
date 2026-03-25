@@ -1,15 +1,20 @@
-import {ChangeDetectionStrategy, Component, effect, inject, OnDestroy, signal} from '@angular/core';
-import {CurrencyPipe} from "@angular/common";
-import {AccountStore} from "../../services/account-store.service";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  OnDestroy,
+  signal,
+} from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { AccountStore } from '../../services/account-store.service';
 
 @Component({
   selector: 'vrw-account-balance-card',
-  imports: [
-    CurrencyPipe
-  ],
+  imports: [CurrencyPipe],
   templateUrl: './account-balance-card.component.html',
   styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountBalanceCardComponent implements OnDestroy {
   accountStore = inject(AccountStore);
@@ -43,10 +48,10 @@ export class AccountBalanceCardComponent implements OnDestroy {
     const update = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       const easeProgress = 1 - Math.pow(1 - progress, 4);
       const current = start + (target - start) * easeProgress;
-      
+
       this.displayBalance.set(current);
 
       if (progress < 1) {

@@ -19,7 +19,7 @@ $background-color_1: color-mix(
 @media (max-width: 1023px) {
   #header[data-kt-sticky="true"] {
     position: relative !important;
-    
+
     &.kt-sticky-on {
       position: relative !important;
       background: transparent !important;

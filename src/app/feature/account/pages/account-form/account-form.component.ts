@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
@@ -27,7 +27,7 @@ import { ColorPickerModule } from 'primeng/colorpicker';
   providers: [MessageService],
   templateUrl: './account-form.component.html',
   styles: ``,
-  changeDetection:ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class AccountFormComponent {
   private fb = inject(FormBuilder);

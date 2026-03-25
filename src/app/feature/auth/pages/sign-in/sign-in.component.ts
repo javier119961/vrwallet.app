@@ -1,4 +1,9 @@
-import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormErrorLabelComponent } from '@shared/components/form-error-label/form-error-label.component';
@@ -19,14 +24,14 @@ import { finalize } from 'rxjs';
   templateUrl: './sign-in.component.html',
   standalone: true,
   styles: ``,
-  changeDetection:ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
   private router = inject(Router);
-  
+
   loading = signal<boolean>(false);
 
   form = this.fb.nonNullable.group({

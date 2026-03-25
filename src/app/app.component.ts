@@ -3,7 +3,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { MetronicInitService } from '@core/services/metronic-init.service';
 import { filter } from 'rxjs';
 import { Toast } from 'primeng/toast';
-import {SwUpdate} from "@angular/service-worker";
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: '[vrw-root]',
@@ -16,7 +16,7 @@ export class AppComponent {
   private metronicInitService = inject(MetronicInitService);
   private router = inject(Router);
   private updates = inject(SwUpdate);
-  
+
   constructor() {
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
@@ -26,12 +26,12 @@ export class AppComponent {
         }, 0);
       });
 
-      this.updates.versionUpdates.subscribe(evt => {
-        if (evt.type === 'VERSION_READY') {
-          if (confirm("Nueva versión disponible. ¿Actualizar?")) {
-            location.reload();
-          }
+    this.updates.versionUpdates.subscribe((evt) => {
+      if (evt.type === 'VERSION_READY') {
+        if (confirm('Nueva versión disponible. ¿Actualizar?')) {
+          location.reload();
         }
-      });
+      }
+    });
   }
 }

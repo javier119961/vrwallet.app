@@ -13,5 +13,4 @@ export class PushNotificationService {
   subscribe(subscription: PushSubscription): Observable<any> {
     return this.http.post(`${this.endpoint}`, subscription);
   }
-  
 }
