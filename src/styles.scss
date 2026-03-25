@@ -16,7 +16,6 @@ $background-color_1: color-mix(
   border-radius: 1.5rem !important;
 }
 
-/* Desactivar sticky header en móvil */
 @media (max-width: 1023px) {
   #header[data-kt-sticky="true"] {
     position: relative !important;
@@ -27,4 +26,8 @@ $background-color_1: color-mix(
       box-shadow: none !important;
     }
   }
+}
+
+* {
+  zoom: 99%;
 }
