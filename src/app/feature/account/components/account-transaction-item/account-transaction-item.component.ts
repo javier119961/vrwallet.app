@@ -1,6 +1,14 @@
-import {ChangeDetectionStrategy, Component, computed, input} from '@angular/core';
-import {Transaction, Type,} from '../../../transaction/interfaces/transaction.interface';
-import {CurrencyPipe, DatePipe} from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
+import {
+  Transaction,
+  Type,
+} from '../../../transaction/interfaces/transaction.interface';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 enum Operation {
   Incoming,
@@ -12,7 +20,7 @@ enum Operation {
   imports: [DatePipe, CurrencyPipe],
   templateUrl: './account-transaction-item.component.html',
   styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountTransactionItemComponent {
   accountId = input.required<string>();

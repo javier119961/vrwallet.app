@@ -7,6 +7,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './mobile-bottom-nav.component.html',
   styleUrl: './mobile-bottom-nav.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MobileBottomNavComponent {}

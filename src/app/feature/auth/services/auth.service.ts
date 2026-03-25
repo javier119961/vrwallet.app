@@ -4,7 +4,7 @@ import { environment } from '@env/environment';
 import { LoginResponse } from '../interfaces/login-response.interface';
 import { catchError, map, Observable, of } from 'rxjs';
 import { TokenService } from './token.service';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private tokenService = inject(TokenService);
   private router = inject(Router);
-  
+
   private readonly baseUrl = environment.baseUrl;
 
   public login(email: string, password: string): Observable<boolean> {
@@ -46,7 +46,7 @@ export class AuthService {
 
   public logout(refresh: boolean = false) {
     this.tokenService.clearTokens();
-    if (refresh){
+    if (refresh) {
       this.router.navigate(['/auth/sign-in']).then();
     }
   }
