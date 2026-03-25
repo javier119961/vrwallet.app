@@ -53,7 +53,7 @@ export class AccountSummaryChartComponent {
   chartOpts = computed<Partial<ChartOptions>>(() => {
     const data = this.dailyBalanceResource.value() || [];
 
-    const normalized = [...data,this.today()];
+    const normalized = data.length > 0 ? data : [...data,this.today()];
     
     const seriesData = normalized.map((b) => b.balance)
     const categories = normalized.map((b) => b.date);
