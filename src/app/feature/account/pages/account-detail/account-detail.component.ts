@@ -5,30 +5,30 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { AccountService } from '../../services/account.service';
 import { CardComponent } from '@shared/components/card/card.component';
 import { AccountTransactionItemComponent } from '../../components/account-transaction-item/account-transaction-item.component';
-import { AccountSummaryCardComponent } from '../../components/account-summary-card/account-summary-card.component';
+import { SummaryCardComponent } from '../../components/summary-card/summary-card.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { AccountSummaryChartComponent } from '../../components/account-summary-chart/account-summary-chart.component';
+import { BalanceChartComponent } from '../../components/balance-chart/balance-chart.component';
 import { format } from 'date-fns';
+import {AccountCardComponent} from "../../components/account-card/account-card.component";
 
 @Component({
   selector: 'vrw-account-detail',
   standalone: true,
   imports: [
     CardComponent,
-    CurrencyPipe,
     RouterLink,
     ProgressSpinner,
     AccountTransactionItemComponent,
-    AccountSummaryCardComponent,
+    SummaryCardComponent,
     NgApexchartsModule,
-    AccountSummaryChartComponent,
+    BalanceChartComponent,
+    AccountCardComponent,
   ],
   templateUrl: './account-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,8 +52,7 @@ export default class AccountDetailComponent {
   balanceTodayChart = computed(() => {
     const date = format(new Date(), 'yyyy-MM-dd');
     const balance = this.account()?.balance || 0;
-    return {
-      date,
+    return {      date,
       balance,
     };
   });

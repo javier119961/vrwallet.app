@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
@@ -15,6 +15,7 @@ import { AccountCreate } from '../../interfaces/account-create.interface';
 import { AccountStore } from '../../services/account-store.service';
 import { Router } from '@angular/router';
 import { ColorPickerModule } from 'primeng/colorpicker';
+import {Account} from "../../interfaces/account.interface";
 
 @Component({
   selector: 'vrw-account-form',
@@ -30,6 +31,8 @@ import { ColorPickerModule } from 'primeng/colorpicker';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class AccountFormComponent {
+  accountId = input<Account | null>(null);
+  
   private fb = inject(FormBuilder);
   private accountTypeService = inject(AccountTypeService);
   private currencyService = inject(CurrencyService);
@@ -45,7 +48,7 @@ export default class AccountFormComponent {
   currencies = toSignal(this.currencyService.get(), { initialValue: [] });
 
   institutions = toSignal(this.institutionService.get(), { initialValue: [] });
-
+  
   form = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(50)]],
     accountTypeId: ['', [Validators.required]],

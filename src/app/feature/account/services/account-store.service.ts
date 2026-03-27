@@ -31,11 +31,14 @@ export const AccountStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed((store) => ({
-    balance: () => {
+    balance: () : number  => {
       return store
         .accounts()
         .reduce((acc, account) => acc + account.balance, 0);
     },
+    count:() : number =>{
+      return store.accounts().length;
+    }
   })),
   withMethods(
     (

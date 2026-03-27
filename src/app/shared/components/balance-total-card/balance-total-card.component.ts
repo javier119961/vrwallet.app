@@ -7,16 +7,16 @@ import {
   signal,
 } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { AccountStore } from '../../services/account-store.service';
+import { AccountStore } from '../../../feature/account/services/account-store.service';
 
 @Component({
-  selector: 'vrw-account-balance-card',
+  selector: 'vrw-balance-total-card',
   imports: [CurrencyPipe],
-  templateUrl: './account-balance-card.component.html',
+  templateUrl: './balance-total-card.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountBalanceCardComponent implements OnDestroy {
+export class BalanceTotalCardComponent implements OnDestroy {
   accountStore = inject(AccountStore);
   displayBalance = signal(0);
   private animationFrameId?: number;

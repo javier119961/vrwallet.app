@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'vrw-account-quick-actions',
+  selector: 'vrw-quick-actions',
   imports: [RouterLink],
-  templateUrl: './account-quick-actions.component.html',
+  templateUrl: './quick-actions.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountQuickActionsComponent {
+export class QuickActionsComponent {
   router = inject(Router);
 }

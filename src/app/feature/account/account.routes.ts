@@ -13,6 +13,11 @@ export default [
     loadComponent: () => import('./pages/account-form/account-form.component'),
   },
   {
+    path: ':id/edit',
+    title: 'edit account | vrwallet',
+    loadComponent: () => import('./pages/account-form/account-form.component'),
+  },
+  {
     path: ':id',
     title: 'account detail | vrwallet',
     loadComponent: () =>

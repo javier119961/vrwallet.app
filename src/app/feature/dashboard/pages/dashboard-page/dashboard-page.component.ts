@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AccountBalanceCardComponent } from '../../../account/components/account-balance-card/account-balance-card.component';
+import {BalanceTotalCardComponent} from "@shared/components/balance-total-card/balance-total-card.component";
 
 @Component({
   selector: 'vrw-dashboard-page',
-  imports: [AccountBalanceCardComponent],
+  imports: [BalanceTotalCardComponent],
   templateUrl: './dashboard-page.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,

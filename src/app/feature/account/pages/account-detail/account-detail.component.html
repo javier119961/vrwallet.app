@@ -10,54 +10,15 @@
   } @else if (account(); as acc) {
     <div class="grid grid-cols-5 gap-4">
       <div class="flex flex-col w-full gap-4 sm:col-span-2 col-span-5">
-        <div
-          class="w-full bg-[#fafbfc] border border-gray-100 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between shadow-sm gap-6"
-        >
-          <div class="flex items-center gap-5">
-            <div
-              class="w-[60px] h-[60px] rounded-2xl flex items-center justify-center shrink-0 shadow-sm text-white font-bold text-2xl"
-              [style.background-color]="accountStyle().primary"
-            >
-              <i class="ki-filled ki-wallet"></i>
-            </div>
-            <div class="flex flex-col">
-              <h2 class="text-[#0f172a] font-bold text-xl leading-tight mb-0.5">
-                {{ acc.name }}
-              </h2>
-            </div>
-          </div>
-
-          <div class="flex flex-col sm:items-end">
-            <span
-              class="text-slate-500 text-xs font-semibold tracking-widest uppercase mb-1"
-              >Saldo Actual</span
-            >
-            <div
-              class="text-slate-800 text-[40px] font-light leading-none mb-2 tracking-tight"
-            >
-              {{ acc.balance | currency }}
-            </div>
-            <div class="flex items-center gap-2 mt-1">
-              <div
-                [style.color]="accountStyle().primary"
-                [style.background-color]="accountStyle().light"
-                class="px-2 py-0.5 rounded-md flex items-center gap-0.5 text-xs font-bold"
-              >
-                <i class="ki-filled ki-arrow-up-refraction"></i> +2.4%
-              </div>
-              <span class="text-slate-400 text-sm">vs mes anterior</span>
-            </div>
-          </div>
-        </div>
-
-        <vrw-account-summary-chart
+        <vrw-account-card [account]="acc" [color]="accountStyle()" />
+        <vrw-balance-chart
           [id]="id()"
           [color]="accountStyle().primary"
           [today]="balanceTodayChart()"
         />
       </div>
       <div class="flex flex-col w-full gap-4 sm:col-span-3 col-span-5">
-        <vrw-account-summary-card [id]="id()" [style]="accountStyle()" />
+        <vrw-summary-card [id]="id()" [style]="accountStyle()" />
         <div class="flex flex-col gap-4">
           @if (transactionsResource.isLoading()) {
             <vrw-card>
