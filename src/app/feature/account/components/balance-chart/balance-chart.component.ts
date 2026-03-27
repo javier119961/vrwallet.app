@@ -12,7 +12,7 @@ import {
   ApexAxisChartSeries,
   ApexChart,
   ApexDataLabels,
-  ApexGrid,
+  ApexGrid, ApexPlotOptions, ApexStroke,
   ApexTitleSubtitle,
   ApexTooltip,
   ApexXAxis,
@@ -22,7 +22,6 @@ import {
 import { rxResource } from '@angular/core/rxjs-interop';
 import { AccountService } from '../../services/account.service';
 import { SelectButton } from 'primeng/selectbutton';
-import { delay } from 'rxjs';
 import { ProgressSpinner } from 'primeng/progressspinner';
 
 export type ChartOptions = {
@@ -35,15 +34,17 @@ export type ChartOptions = {
   title: ApexTitleSubtitle;
   annotations: ApexAnnotations;
   dataLabels: ApexDataLabels;
+  stroke:ApexStroke,
+  plotOptions:ApexPlotOptions
 };
 
 @Component({
-  selector: 'vrw-account-summary-chart',
+  selector: 'vrw-balance-chart',
   imports: [ChartComponent, SelectButton, ProgressSpinner],
-  templateUrl: './account-summary-chart.component.html',
+  templateUrl: './balance-chart.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountSummaryChartComponent {
+export class BalanceChartComponent {
   id = input.required<string>();
   color = input.required<string>();
   today = input.required<{ date: string; balance: number }>();
@@ -51,8 +52,8 @@ export class AccountSummaryChartComponent {
   private accountService = inject(AccountService);
 
   stateOptions: { label: string; value: number }[] = [
-    { label: '7 dias', value: 7 },
-    { label: '30 dias', value: 30 },
+    { label: '7 días', value: 7 },
+    { label: '30 días', value: 30 },
     { label: '12 semanas', value: 84 },
     { label: '6 meses', value: 182 },
     { label: '1 año', value: 365 },
@@ -131,6 +132,19 @@ export class AccountSummaryChartComponent {
           right: 10,
         },
       },
+      stroke:{
+        curve: 'monotoneCubic',
+        lineCap: 'round',
+        width: 4
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 9,
+          borderRadiusApplication: 'end', // solo redondea la punta superior
+          columnWidth: '60%',
+        },
+        area:{}
+      }
     };
   });
   optionSelected = signal<number>(7);
@@ -151,7 +165,6 @@ export class AccountSummaryChartComponent {
       const startDate = lastWeek.toISOString().split('T')[0];
       return this.accountService
         .getDailyBalance(params.id, startDate)
-        .pipe(delay(1000));
     },
   });
 }

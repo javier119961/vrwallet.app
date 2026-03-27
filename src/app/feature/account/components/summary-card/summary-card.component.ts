@@ -11,9 +11,9 @@ import { CardComponent } from '@shared/components/card/card.component';
 import { CurrencyPipe, PercentPipe } from '@angular/common';
 
 @Component({
-  selector: 'vrw-account-summary-card',
+  selector: 'vrw-summary-card',
   imports: [CardComponent, CurrencyPipe, PercentPipe],
-  templateUrl: './account-summary-card.component.html',
+  templateUrl: './summary-card.component.html',
   styles: `
     ::ng-deep .p-togglebutton .p-togglebutton-content {
       padding: 5px 0 !important;
@@ -21,7 +21,7 @@ import { CurrencyPipe, PercentPipe } from '@angular/common';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountSummaryCardComponent {
+export class SummaryCardComponent {
   id = input.required<string>();
   style = input.required<{ primary: string; light: string }>();
 
