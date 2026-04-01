@@ -2,7 +2,7 @@ interface Operation {
   accountId: string;
   categoryId?: string;
   amount: number;
-  date: string;
+  date: Date | null;
   note?: string;
   payer?: string;
 }
