@@ -19,6 +19,7 @@ import {DatePickerModule} from 'primeng/datepicker';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectedBalanceCardComponent} from "../../components/projected-balance-card/projected-balance-card.component";
 import {InputCurrencyComponent} from "@shared/components/input-currency/input-currency.component";
+import {format} from "date-fns";
 
 @Component({
   selector: 'vrw-transaction-form',
@@ -56,7 +57,6 @@ export default class TransactionFormComponent {
   filteredAccounts = signal<Account[]>([]);
   
   accountParam = computed(()=>{
-    console.log(this.accountId())
     const id = this.accountId();
     return id 
       ? this.accountStore.accounts().find((account) => account.id === id) ?? null
@@ -84,7 +84,7 @@ export default class TransactionFormComponent {
     destinationAccountId: [null],
     categoryId: ['', Validators.required],
     amount: [0, [Validators.required, Validators.min(1)]],
-    date: ['', Validators.required],
+    date: [null, Validators.required],
     note: ['', Validators.maxLength(100)],
     payer: ['', Validators.maxLength(100)],
     type: [this.typeParam(), Validators.required],
@@ -95,18 +95,6 @@ export default class TransactionFormComponent {
     { label: 'Income', value: Type.Income },
     { label: 'Transfer', value: Type.Transfer },
   ];
-
-  get currentIncome(): Income {
-    return this.form.value as Income;
-  }
-
-  get currentTransfer(): Transfer {
-    return this.form.getRawValue() as unknown as Transfer;
-  }
-
-  get currentExpense(): Expense {
-    return this.form.value as Expense;
-  }
   
   get amount() : number {
     return this.form.get('amount')?.value ?? 0;
@@ -129,6 +117,7 @@ export default class TransactionFormComponent {
   }
 
   constructor(private location: Location) {
+    //bug: eliminar el effect, ya que no debe setear valores
     effect(() => {
       const accountByParam = this.accountParam();
       if (accountByParam){
@@ -146,7 +135,7 @@ export default class TransactionFormComponent {
     const query = event.query.toLowerCase();
 
     const filter = this.categories().filter((category) =>
-      category.name.toLowerCase().startsWith(query),
+      category.name.toLowerCase().includes(query),
     );
 
     this.filteredCategories.set(filter);
@@ -157,26 +146,17 @@ export default class TransactionFormComponent {
     isDestination: boolean = false,
   ) {
     const query = event.query.toLowerCase();
-
-    const type = this.form.get('type')?.value;
-    const destinationControl = this.form.get('destinationAccountId');
-
-    if (
-      !isDestination &&
-      type === Type.Transfer &&
-      this.currentTransfer.destinationAccountId
-    ) {
-      destinationControl?.reset();
-    }
-
+    const {type,accountId,destinationAccountId} = this.form.getRawValue();
+    
     const accounts = this.accountStore.accounts();
-
     const filtered = accounts.filter((account) => {
-      const matchesQuery = account.name.toLowerCase().startsWith(query);
-      const validDestination =
-        !isDestination || account.id !== this.currentTransfer.accountId;
-
-      return matchesQuery && validDestination;
+      const matchesQuery = account.name.toLowerCase().includes(query);
+      
+      const isDuplicated = isDestination 
+        ? account.id !== accountId 
+        : account.id !== destinationAccountId
+        
+      return matchesQuery && (type !== Type.Transfer || isDuplicated);
     });
 
     this.filteredAccounts.set(filtered);
@@ -186,7 +166,7 @@ export default class TransactionFormComponent {
     this.accountSelected.set(account.value);
   }
 
-  handleChangeTypeOperation({ value }: any) {
+  handleChangeTypeOperation({ value } : any) {
     const destControl = this.form.get('destinationAccountId');
     const categoryControl = this.form.get('categoryId');
 
@@ -202,25 +182,34 @@ export default class TransactionFormComponent {
     destControl?.updateValueAndValidity();
     categoryControl?.updateValueAndValidity();
   }
+  
+  private payload<T> (){ 
+    const rawValue = this.form.getRawValue();
+
+   return {
+      ...rawValue,
+      date: format(rawValue.date ?? Date.now(),  "yyyy-MM-dd'T'HH:mm:ss")
+    } as T
+  }
 
   handleSubmit(): void {
     if (this.form.invalid) return;
 
     this.loading.set(true);
 
-    const request$: Record<Type, Observable<Transaction>> = {
-      [Type.Expense]: this.transactionService.expense(this.currentExpense),
-      [Type.Income]: this.transactionService.add(this.currentIncome),
-      [Type.Transfer]: this.transactionService.transfer(this.currentTransfer),
+    const request$: Record<Type, () => Observable<Transaction>> = {
+      [Type.Expense]: () => this.transactionService.expense(this.payload<Expense>()),
+      [Type.Income]: () => this.transactionService.add(this.payload<Income>()),
+      [Type.Transfer]: () => this.transactionService.transfer(this.payload<Transfer>()),
     };
 
-    request$[this.form.get('type')?.value!]
+    request$[this.form.get('type')?.value!]()
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (transaction: Transaction) => {
           this.messageService.add({
             severity: 'success',
-            detail: 'La transaccion se ha llevado acabo con exito.',
+            detail: 'La transacción se ha llevado acabo con éxito.',
           });
           this.accountStore.loadAccounts();
           this.router.navigate(['/accounts', transaction.accountId]).then();
@@ -230,7 +219,7 @@ export default class TransactionFormComponent {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Hubo problemas al realizar la transaccion',
+            detail: 'Hubo problemas al realizar la transacción',
           });
         },
       });
