@@ -16,6 +16,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { BalanceChartComponent } from '../../components/balance-chart/balance-chart.component';
 import { format } from 'date-fns';
 import {AccountCardComponent} from "../../components/account-card/account-card.component";
+import {AccountDetail} from "../../interfaces/account.interface";
 
 @Component({
   selector: 'vrw-account-detail',
@@ -48,7 +49,8 @@ export default class AccountDetailComponent {
     stream: ({ params }) => this.accountService.getTransactions(params.id),
   });
 
-  account = computed(() => this.accountResource.value());
+  account = computed<AccountDetail|undefined>(() => this.accountResource.value());
+  isInvestment = computed(() => this.account()?.isInvestment);
   balanceTodayChart = computed(() => {
     const date = format(new Date(), 'yyyy-MM-dd');
     const balance = this.account()?.balance || 0;

@@ -8,3 +8,7 @@ export interface Account {
   color: string;
   balance: number;
 }
+
+export interface AccountDetail extends Account{
+  isInvestment?: boolean;
+}

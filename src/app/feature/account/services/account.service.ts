@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '@env/environment';
-import { Account } from '../interfaces/account.interface';
+import {Account, AccountDetail} from '../interfaces/account.interface';
 import { Observable } from 'rxjs';
 import { AccountCreate } from '../interfaces/account-create.interface';
 import { Transaction } from '../../transaction/interfaces/transaction.interface';
@@ -27,8 +27,8 @@ export class AccountService {
     return this.http.put<Account>(`${this.baseUrl}/account/${id}`, account);
   }
 
-  public getById(id: string) {
-    return this.http.get<Account>(`${this.baseUrl}/account/${id}`);
+  public getById(id: string) : Observable<AccountDetail> {
+    return this.http.get<AccountDetail>(`${this.baseUrl}/account/${id}`);
   }
 
   public getTransactions(id: string): Observable<Transaction[]> {
