@@ -18,7 +18,9 @@
         />
       </div>
       <div class="flex flex-col w-full gap-4 sm:col-span-3 col-span-5">
-        <vrw-summary-card [id]="id()" [style]="accountStyle()" />
+        <vrw-summary-card
+            [summary]="account()!"
+            [style]="accountStyle()" />
         @if (isInvestment()) {
           <vrw-card>
             <div class="w-full">

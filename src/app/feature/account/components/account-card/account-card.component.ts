@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, input} from '@angular/core';
 import {CurrencyPipe, UpperCasePipe} from "@angular/common";
 import {RouterLink} from "@angular/router";
-import {AccountDetail} from "../../interfaces/account.interface";
+import {AccountSummary} from "../../interfaces/account-summary.interface";
 
 @Component({
   selector: 'vrw-account-card',
@@ -16,5 +16,5 @@ import {AccountDetail} from "../../interfaces/account.interface";
 })
 export class AccountCardComponent {
   color = input.required<{primary:string,light:string}>();
-  account = input.required<AccountDetail>();
+  account = input.required<AccountSummary>();
 }
