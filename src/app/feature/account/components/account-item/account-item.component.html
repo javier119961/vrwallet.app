@@ -1,40 +1,45 @@
 @if (account() !== null) {
-  <div
-    class="flex items-center justify-between gap-2 py-2 border-b border-border border-dashed last:border-none"
-  >
-    <div class="flex items-center gap-3">
+  <div class="flex items-center justify-between gap-4 py-3 border-b border-border border-dashed last:border-none">
+
+    <div class="flex items-stretch gap-3 min-w-0">
       <div
-        class="w-[3px] h-8 rounded-full"
+        class="w-1 rounded-full shrink-0"
         [style.background-color]="account().color || '#009688'"
       ></div>
-      <div>
-        <div class="flex flex-col">
-          <a
-            [routerLink]="['/accounts', account().id]"
-            class="text-sm font-medium text-foreground hover:text-primary"
-          >
-            {{ account().name }}
-          </a>
-          <span class="text-xs font-normal text-muted-foreground">
-            {{ account().accountType.name }}
-          </span>
+
+      <div class="flex flex-col justify-center min-w-0">
+        <a
+          [routerLink]="['/accounts', account().id]"
+          class="text-sm font-semibold text-foreground hover:text-primary truncate transition-colors"
+        >
+          {{ account().name }}
+        </a>
+        <div class="text-xs text-muted-foreground truncate mt-0.5">
+          <span>{{ account().accountType.name }}</span>
+          @if (account().accountNumber) {
+            <span class="ml-1 opacity-75">· {{ account().accountNumber }}</span>
+          }
         </div>
-        <div class="text-sm font-normal text-muted-foreground">
-          {{ account().accountNumber }}
-        </div>
+        @if (isCredit()) {
+          <div class="kt-progress w-[100px] mt-1" >
+            <div
+              [style.width]="percentageOfCreditUsed() | percent"
+              [style.background-color]="account().color || '#009688'"
+              class="kt-progress-indicator"></div>
+          </div>
+        }
       </div>
     </div>
-    <div class="flex items-end gap-1 flex-col">
-      <span class="kt-badge kt-badge-outline kt-badge-primary min-w-[80px]">
+
+    <div class="flex flex-col items-end gap-1.5 shrink-0">
+      <span class="inline-flex items-center px-2.5 py-0.5 text-sm font-medium rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-400">
         {{ account().balance | currency }}
       </span>
+
       @if (isCredit()) {
-        <div class="kt-progress" >
-          <div
-            [style.width]="percentageOfCreditUsed() | percent"
-            [style.background-color]="account().color || '#009688'"
-            class="kt-progress-indicator"></div>
-        </div>
+        <span class="text-[11px] leading-none text-muted-foreground whitespace-nowrap">
+          Línea de crédito: {{ credit()?.creditLimit | currency }}
+        </span>
       }
     </div>
   </div>

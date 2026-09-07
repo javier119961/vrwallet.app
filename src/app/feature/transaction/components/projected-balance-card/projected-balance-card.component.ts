@@ -2,12 +2,14 @@ import {ChangeDetectionStrategy, Component, computed, input} from '@angular/core
 import {CurrencyPipe, PercentPipe} from "@angular/common";
 import {Type} from "../../interfaces/transaction.interface";
 import {AccountDetail} from '../../../account/interfaces/account-detail.interface';
+import {CardComponent} from '@shared/components/card/card.component';
 
 @Component({
   selector: 'vrw-projected-balance-card',
   imports: [
     CurrencyPipe,
-    PercentPipe
+    PercentPipe,
+    CardComponent
   ],
   templateUrl: './projected-balance-card.component.html',
   styles: ``,
